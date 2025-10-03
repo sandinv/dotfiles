@@ -1,0 +1,4 @@
+alias t=task
+alias k=kubectl
+alias vim="nvim"
+alias ll="ls -l"

@@ -1,0 +1,20 @@
+version: '3'
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task --list
+
+  update:linux:
+    desc: Update linux configs and package list
+    cmds:
+      - stow -S linux -t ~
+      - stow -S common -t ~
+
+  update:macos:
+    desc: Update macOS configs
+    cmds:
+      - stow -S mac -t ~
+      - stow -S common -t ~
+

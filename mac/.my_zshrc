@@ -1,0 +1,71 @@
+set -o vi
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+source ~/.aliases
+source ~/.common_aliases
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+eval "$(atuin init zsh)"
+
+function z() { # Change directory to a git repository
+  dir=$(ls ~/git  | fzf)
+  cd ~/git/$dir
+  tmux rename-window $dir
+}
+
+function k9ss() { # Select a kubernetes context and open k9s in readonly mode. By passing w as the first argument, it would open k9s with write permission.
+  context=$(kubectl config get-contexts -oname| fzf)
+  tmux rename-window $context
+  export K9S_CLUSTER=$context
+  if [[ "$1" = "w" ]]; then
+    k9s --context=$context
+  else
+    k9s --context=$context --readonly
+  fi
+}
+
+function passc() { # Select an entry from the password-store and copy the password to the clipboard
+  pass show --clip=1 $(ls ~/.password-store | sed 's/\.gpg//g' |fzf ) 
+}
+
+function passu() { # Select an entry from the password-store and copy the username to the clipboard
+  pass show --clip=2 $(ls ~/.password-store | sed 's/\.gpg//g' |fzf )
+}
+
+function passb() { # Copy username then after 5 seconds it copies the password
+  entry=$(ls ~/.password-store | sed 's/\.gpg//g' |fzf ) 
+  echo "Copying username"
+  pass show --clip=2 $entry
+  sleep 5
+  echo "Copying password"
+  pass show --clip=1 $entry
+}
+
+
+function listFunctions() { # Print the available commands
+  data=$(grep "^function" ~/.my_zshrc  | grep '()' | sed 's/function//g'  | sed 's/() {/:/')
+  # Color code for the first column (e.g., green)
+  color="\033[32m"
+  # Reset color code
+  reset="\033[0m"
+
+  echo "$data" | awk -F': '  -v color="$color" -v reset="$reset" '{ printf color "%-20s" reset " : %s\n", $1, $2 }'
+}
+
+function reload() { # source this file
+  source ~/.my_zshrc
+}
+function load_envs() {
+  while IFS='=' read -r key value
+  do
+    # Skip empty lines or lines starting with #
+    [[ -z "$key" || "$key" =~ ^# ]] && continue
+    # Export the variable
+    export "$key=$value"  done 
+  done <<< $(pass show environment)
+}
+

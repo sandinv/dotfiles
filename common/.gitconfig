@@ -1,0 +1,23 @@
+[user]
+	name = Victor Sandin
+	email = victor@vsandin.net
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[credential]
+	helper = manager
+
+[init]
+	defaultBranch = master
+
+# Add the following to your .gitconfig file.
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[http]
+	postBuffer = 1048576000
+[fetch]
+	prune = true

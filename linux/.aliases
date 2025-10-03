@@ -1,0 +1,3 @@
+alias edwm="nvim ~/dotfiles/dwm/config.h"
+alias koofr="~/.koofr-dist/storagegui"
+alias pbcopy="xclip -selection clipboard"
