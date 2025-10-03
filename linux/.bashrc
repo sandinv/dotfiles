@@ -47,4 +47,18 @@ function pom_toggle() {
    kill -USR2 $(cat ~/.cache/dwm_status.pid)
 }
    
+function stream() {
+    # Format of .music: <url> # Comment
+    radio=$(cat ~/.music|sed '/^[[:space:]]*$/d'|fzf)
+    # Get the URL
+    url="${radio%%#*}"
+    # Rename tmux window
+    tmux rename-window "Radio"
+    # Play it
+    mpv --no-video --audio-display=no \
+    --ytdl-format='bestaudio[ext=webm]/bestaudio/best' \
+    --script-opts=ytdl_hook-ytdl_path=yt-dlp \
+    $url
+
+}
 
