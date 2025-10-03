@@ -7,7 +7,16 @@ source ~/.common_aliases
 # General settings and init
 export EDITOR=nvim
 set -o vi
-eval `ssh-agent`
+
+# Start ssh-agent only if not already running
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    eval "$(ssh-agent -s)" > /dev/null
+fi
+
+# Export environment variables so new shells reuse the existing agent
+export SSH_AGENT_PID=$(pgrep -u "$USER" ssh-agent | head -n1)
+export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user "$USER" -type s 2>/dev/null | head -n1)
+
 
 # Functions
 function reload() {
