@@ -7,7 +7,7 @@ tasks:
       - task --list
 
   update:linux:
-    desc: Update linux configs and package list
+    desc: Update linux configs
     cmds:
       - stow -S linux -t ~
       - stow -S common -t ~
