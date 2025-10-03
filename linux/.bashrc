@@ -62,3 +62,8 @@ function stream() {
 
 }
 
+function z() {
+    dir=$(ls ~/git | fzf)
+    cd ~/git/$dir
+    tmux rename-window $dir
+}
